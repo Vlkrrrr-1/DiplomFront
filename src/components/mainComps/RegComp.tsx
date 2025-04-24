@@ -1,37 +1,41 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Box } from "@mui/material";
-import { Context } from "../..";
 import { useNavigate } from "react-router";
 import { observer } from "mobx-react-lite";
 import LoginButton from "../UI/buttons/LoginButton";
 import PageBox from "../UI/boxes/PageBox";
 import CustomInput from "../UI/input/CustomInput";
+import { useAuthStore } from "@/store/useAuthStore";
+import { useUIStore } from "@/store/useUIStore";
+import { useUserStore } from "@/store/useUserStore";
 
 const RegComp = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const { store } = useContext(Context);
   const navigate = useNavigate();
+  const authStore = useAuthStore();
+  const uiStore = useUIStore();
+  const userStore = useUserStore();
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-      await store.getUserInfo();
-      if (store.user.isActivated) {
-        store.setAuth(true);
-        store.setRegInfo("You have successfully activated your email!");
+      await userStore.getUserInfo();
+      if (userStore.user.isActivated) {
+        authStore.setAuth(true);
+        uiStore.setRegInfo("You have successfully activated your email!");
         setTimeout(() => {
-          store.setRegInfo("");
+          uiStore.setRegInfo("");
         }, 5000);
       }
     };
     fetchUserInfo();
-  }, [navigate, store]);
+  }, [navigate, authStore]);
 
   const handleRegistration = async () => {
-    await store.registration(email, password);
+    await authStore.registration(email, password);
     setPassword("");
-    if (localStorage.getItem("token") && !store.user.isActivated)
-      store.setRegInfo("You need to confirm your email!");
+    if (localStorage.getItem("token") && !userStore.user.isActivated)
+      uiStore.setRegInfo("You need to confirm your email!");
   };
 
   return (
@@ -62,7 +66,7 @@ const RegComp = () => {
               <LoginButton onClick={handleRegistration}>Register</LoginButton>
               <Box sx={linkWrapperStyles}>
                 <a href="https://mail.google.com" style={linkStyles}>
-                  {store.regInfo}
+                  {uiStore.regInfo}
                 </a>
               </Box>
             </Box>

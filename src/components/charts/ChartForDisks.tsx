@@ -3,8 +3,8 @@ import { Box, Typography } from "@mui/material";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 import ResourcesService from "../../services/ResourcesService";
-import { Context } from "../..";
 import LoadingLogo from "../layout/LoadingLogo";
+import { useUIStore } from "@/store/useUIStore";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -113,7 +113,7 @@ const DiskPieChart = ({ disk }: { disk: DiskData }) => {
 
 const DisksChartPage = () => {
   const [needDisks, setNeedDisks] = useState<DiskData[]>([]);
-  const { store } = useContext(Context);
+  const selectedPC = useUIStore((state) => state.selectedPC);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   React.useEffect(() => {
@@ -126,11 +126,11 @@ const DisksChartPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await ResourcesService.getDiskInfo(store.selectedPC);
+      const result = await ResourcesService.getDiskInfo(selectedPC);
       setNeedDisks(result);
     };
     fetchData();
-  }, [store.selectedPC]);
+  }, [selectedPC]);
 
   return isLoading ? (
     <Box

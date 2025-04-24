@@ -4,23 +4,27 @@ import NotifMethod from "../notificationComps/NotifMethod";
 import TrigConditions from "../notificationComps/TrigConditions";
 import NotifFrequency from "../notificationComps/NotifFrequency";
 import NotifActiveTime from "../notificationComps/NotifActiveTime";
-import { Context } from "../..";
 import NotificationService from "../../services/NotificationService";
+import { useUserStore } from "@/store/useUserStore";
+import { useNotificationStore } from "@/store/useNotificationsStore";
+import { useUIStore } from "@/store/useUIStore";
 
 const NotificationComp = () => {
-  const { store } = useContext(Context);
-  const { notificationStore } = useContext(Context);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const email = useUserStore((state) => state.user.email);
+  const notificationStore = useNotificationStore();
+  const selectedPC = useUIStore((state) => state.selectedPC);
 
   const fetchNotifications = async () => {
     const response = await NotificationService.getNotifToUser();
     if (response?.data) notificationStore.setStoreFromSettings(response.data);
     setIsLoading(false);
   };
+
   fetchNotifications();
   const sendNotifications = () => {
     const notificationOptions = {
-      emailContact: store.user.email,
+      emailContact: email,
       activeTime: notificationStore.activeTime,
       startTime: notificationStore.startTime,
       endTime: notificationStore.endTime,
@@ -74,7 +78,7 @@ const NotificationComp = () => {
               fontSize: { xs: "1rem" },
             }}
           >
-            Notifications for device: {store.selectedPC}
+            Notifications for device: {selectedPC}
           </Typography>
           <NotifMethod />
           <TrigConditions />

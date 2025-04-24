@@ -1,37 +1,41 @@
 import React, { useContext, useState } from "react";
 import { Box } from "@mui/material";
-import { Context } from "../..";
 import { Link, useNavigate } from "react-router";
 import { observer } from "mobx-react-lite";
 import LoginButton from "../UI/buttons/LoginButton";
 import PageBox from "../UI/boxes/PageBox";
 import CustomInput from "../UI/input/CustomInput";
+import { useAuthStore } from "@/store/useAuthStore";
+import { useUIStore } from "@/store/useUIStore";
+import { useUserStore } from "@/store/useUserStore";
 
 const LoginComp = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const { store } = useContext(Context);
   const navigate = useNavigate();
+  const authStore = useAuthStore();
+  const uiStore = useUIStore();
+  const userStore = useUserStore();
 
   const handleLogin = async () => {
-    await store.login(email, password);
-    if (!store.isAuth) {
-      store.setLogInfo("Check your login and password");
+    await authStore.login(email, password);
+    if (!authStore.isAuth) {
+      uiStore.setLogInfo("Check your login and password");
       setEmail("");
       setPassword("");
     } else {
-      await store.login(email, password);
-      if (!store.user.isActivated) {
-        store.setLogInfo("Firstly you must confirm your email.");
+      await authStore.login(email, password);
+      if (!userStore.user.isActivated) {
+        uiStore.setLogInfo("Firstly you must confirm your email.");
         setEmail("");
         setPassword("");
       } else {
-        store.setLogInfo("You have successfully logged in!");
+        uiStore.setLogInfo("You have successfully logged in!");
         setEmail("");
         setPassword("");
         setTimeout(() => {
           navigate("/");
-          store.setLogInfo("Don't have an account? Register");
+          uiStore.setLogInfo("Don't have an account? Register");
         }, 2000);
       }
     }
@@ -67,7 +71,7 @@ const LoginComp = () => {
           </form>
           <Box sx={linkBoxStyles}>
             <Link style={linkStyles} to={"/registration"}>
-              {store.logInfo}
+              {uiStore.logInfo}
             </Link>
           </Box>
         </Box>

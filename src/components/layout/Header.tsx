@@ -5,12 +5,13 @@ import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useContext } from "react";
-import { Context } from "../..";
 import { Link as RouterLink } from "react-router-dom";
 import { useNavigate } from "react-router";
 import { observer } from "mobx-react-lite";
 import Box from "@mui/material/Box";
 import HeaderButton from "../UI/buttons/HeaderButton";
+import { useUserStore } from "@/store/useUserStore";
+import { useAuthStore } from "@/store/useAuthStore";
 
 interface HeaderProps {
   toggleDrawer: (
@@ -19,7 +20,8 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ toggleDrawer }) => {
-  const { store } = useContext(Context);
+  const isActivated = useUserStore((state) => state.user.isActivated);
+  const logOut = useAuthStore((state) => state.logout);
   const navigate = useNavigate();
 
   return (
@@ -80,14 +82,14 @@ const Header: React.FC<HeaderProps> = ({ toggleDrawer }) => {
         </Typography>
 
         <Box sx={{ display: "flex", gap: 1, marginLeft: "auto" }}>
-          {store.user.isActivated ? (
+          {isActivated ? (
             <>
               <Typography variant="body1" sx={{ alignSelf: "center" }}>
                 Welcome!
               </Typography>
               <HeaderButton
                 variant="contained"
-                onClick={() => store.logout()}
+                onClick={() => logOut()}
                 sx={{
                   backgroundColor: "rgb(211, 47, 47)",
                   "&:hover": {

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import { Line } from "react-chartjs-2";
 import {
@@ -13,8 +13,8 @@ import {
   Filler,
 } from "chart.js";
 import ResourcesService from "../../services/ResourcesService";
-import { Context } from "../..";
 import LoadingLogo from "../layout/LoadingLogo";
+import { useUIStore } from "@/store/useUIStore";
 
 ChartJS.register(
   CategoryScale,
@@ -199,7 +199,7 @@ const CpuLoadChart = ({
 const ChartForCPU = () => {
   const [dataMap, setDataMap] = useState<Record<string, number[]>>({});
   const [labelsMap, setLabelsMap] = useState<Record<string, string[]>>({});
-  const { store } = useContext(Context);
+  const selectedPC = useUIStore((state) => state.selectedPC);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -217,13 +217,13 @@ const ChartForCPU = () => {
 
       if (range === "10m") {
         interval = 1;
-        result = await ResourcesService.getLast10MinutesCpu(store.selectedPC);
+        result = await ResourcesService.getLast10MinutesCpu(selectedPC);
       } else if (range === "1h") {
         interval = 10;
-        result = await ResourcesService.getLastHourCpu(store.selectedPC);
+        result = await ResourcesService.getLastHourCpu(selectedPC);
       } else if (range === "24h") {
         interval = 60;
-        result = await ResourcesService.getLast24HoursCpu(store.selectedPC);
+        result = await ResourcesService.getLast24HoursCpu(selectedPC);
       }
 
       const generatedLabels = Array.from({ length: result.length }, (_, i) => {
@@ -245,7 +245,7 @@ const ChartForCPU = () => {
     };
 
     ["10m", "1h", "24h"].forEach(fetchData);
-  }, [store.selectedPC]);
+  }, [selectedPC]);
 
   const ranges = [
     { label: "Last 10 Minutes", value: "10m" },

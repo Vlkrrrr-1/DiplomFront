@@ -28,6 +28,26 @@ const theme = createTheme({
       textTransform: "none",
     },
   },
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        html: {
+          height: "100%",
+          scrollbarWidth: "none",
+        },
+        body: {
+          height: "100%",
+          margin: 0,
+          padding: 0,
+          overflowY: "scroll",
+          "-ms-overflow-style": "none",
+        },
+        "body::-webkit-scrollbar": {
+          display: "none",
+        },
+      },
+    },
+  },
 });
 
 export default theme;

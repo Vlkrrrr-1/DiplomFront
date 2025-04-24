@@ -10,13 +10,13 @@ import {
   IconButton,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Context } from "../..";
 import { observer } from "mobx-react-lite";
 import NotifPanelBox from "../UI/boxes/NotifPanelBox";
+import { useNotificationStore } from "@/store/useNotificationsStore";
 
 const NotifActiveTime = () => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
-  const { notificationStore } = useContext(Context);
+  const notificationStore = useNotificationStore();
 
   return (
     <NotifPanelBox sx={{ borderLeft: "6px solid #BD10E0" }}>

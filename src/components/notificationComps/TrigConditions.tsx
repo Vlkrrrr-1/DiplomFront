@@ -3,12 +3,12 @@ import { Box, Collapse, Typography } from "@mui/material";
 import TrigConditionsForm from "./TrigConditionsForm";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { observer } from "mobx-react-lite";
-import { Context } from "../..";
 import NotifPanelBox from "../UI/boxes/NotifPanelBox";
+import { useNotificationStore } from "@/store/useNotificationsStore";
 
 const TrigConditions = () => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
-  const { notificationStore } = useContext(Context);
+  const notificationStore = useNotificationStore();
 
   return (
     <NotifPanelBox sx={{ borderLeft: "6px solid rgb(155, 226, 74)" }}>

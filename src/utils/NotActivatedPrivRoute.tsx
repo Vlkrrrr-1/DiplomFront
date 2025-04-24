@@ -1,11 +1,11 @@
+import { useUserStore } from "@/store/useUserStore";
 import React, { useContext } from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { Context } from "..";
 import { toast } from "react-toastify";
 
 const NotActivatedPrivRoute = () => {
-  const { store } = useContext(Context);
-  if (store.user.isActivated) {
+  const isActivated = useUserStore((state) => state.user.isActivated);
+  if (isActivated) {
     return <Outlet />;
   } else {
     toast("To use website u must confirm ur email");

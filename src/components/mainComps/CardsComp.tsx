@@ -3,26 +3,26 @@ import AllCards from "../cards/AllCards";
 import { CompInfo } from "../../models/Types";
 import { Box } from "@mui/material";
 import ResourcesService from "../../services/ResourcesService";
-import { Context } from "../..";
 import CompCard from "../cards/CompCard";
 import { toast } from "react-toastify";
 import PageBox from "../UI/boxes/PageBox";
 import CustomTypography from "../UI/text/CustomTypography";
 import CustomGrid from "../UI/grid/CustomGrid";
+import { useUIStore } from "@/store/useUIStore";
 
 const CardsComp = () => {
-  const { store } = useContext(Context);
   const [compInfo, setCompInfo] = useState<CompInfo[] | undefined>([]);
   const [cardInfo, setCardInfo] = useState<CompInfo | undefined>();
   const [isShowCards, setIsShowCards] = useState<boolean>(false);
+  const { selectedPC, setSelectedPC } = useUIStore();
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     setCardInfo(
       compInfo?.filter((el) => el.deviceName === e.currentTarget.value)[0]
     );
     setIsShowCards(true);
-    store.setSelectedPC(e.currentTarget.value);
-    toast(`You selected device ${store.selectedPC}`);
+    setSelectedPC(e.currentTarget.value);
+    toast(`You selected device ${selectedPC}`);
   };
 
   const getInfo = async () => {

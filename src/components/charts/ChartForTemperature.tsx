@@ -13,8 +13,8 @@ import {
   Filler,
 } from "chart.js";
 import ResourcesService from "../../services/ResourcesService";
-import { Context } from "../..";
 import LoadingLogo from "../layout/LoadingLogo";
+import { useUIStore } from "@/store/useUIStore";
 
 ChartJS.register(
   CategoryScale,
@@ -191,12 +191,10 @@ const ChartForTemperature = () => {
 
     return () => clearTimeout(timer);
   }, []);
-  const { store } = useContext(Context);
+  const selectedPC = useUIStore((state) => state.selectedPC);
   useEffect(() => {
     const fetchData = async () => {
-      const result = await ResourcesService.getLastHourTemperature(
-        store.selectedPC
-      );
+      const result = await ResourcesService.getLastHourTemperature(selectedPC);
       const now = new Date();
       const interval = 10;
 
@@ -214,7 +212,7 @@ const ChartForTemperature = () => {
     };
 
     fetchData();
-  }, [store.selectedPC]);
+  }, [selectedPC]);
 
   return isLoading ? (
     <Box

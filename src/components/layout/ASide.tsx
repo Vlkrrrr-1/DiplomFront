@@ -8,10 +8,10 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import HistoryIcon from "@mui/icons-material/History";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { Context } from "../..";
 import SideBox from "../UI/boxes/SideBox";
 import CustomBox from "../UI/boxes/CustomBox";
 import CustomListItemButton from "../UI/lists/CustomListItemButton";
+import { useUIStore } from "@/store/useUIStore";
 
 interface ASideProps {
   toggleDrawer: (
@@ -21,7 +21,7 @@ interface ASideProps {
 }
 
 const ASide: React.FC<ASideProps> = ({ toggleDrawer, isOpen }) => {
-  const { store } = React.useContext(Context);
+  const selectedPC = useUIStore((state) => state.selectedPC);
   const items = [
     { text: "Main", icon: <InboxIcon />, link: "/cards" },
     { text: "History", icon: <HistoryIcon />, link: "/history" },
@@ -42,7 +42,7 @@ const ASide: React.FC<ASideProps> = ({ toggleDrawer, isOpen }) => {
           padding: "20px",
         }}
       >
-        Selected PC: {store.selectedPC}
+        Selected PC: {selectedPC}
       </CustomBox>
       <Divider sx={{ backgroundColor: "#444" }} />
       <List>

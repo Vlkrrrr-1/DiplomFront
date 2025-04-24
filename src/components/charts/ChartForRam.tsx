@@ -2,9 +2,9 @@ import React, { useContext, useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
-import { Context } from "../..";
 import ResourcesService from "../../services/ResourcesService";
 import LoadingLogo from "../layout/LoadingLogo";
+import { useUIStore } from "@/store/useUIStore";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -108,7 +108,7 @@ const RamPieChart = ({ ram }: { ram: RamData }) => {
 };
 
 const ChartForRam = () => {
-  const { store } = useContext(Context);
+  const selectedPC = useUIStore((state) => state.selectedPC);
   const [ramDisk, setRamDisk] = useState<RamData>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -121,11 +121,11 @@ const ChartForRam = () => {
   }, []);
   useEffect(() => {
     const getInfoForRam = async () => {
-      const result = await ResourcesService.getRamInfo(store.selectedPC);
+      const result = await ResourcesService.getRamInfo(selectedPC);
       setRamDisk(result);
     };
     getInfoForRam();
-  }, [store.selectedPC]);
+  }, [selectedPC]);
   return isLoading ? (
     <Box
       sx={{

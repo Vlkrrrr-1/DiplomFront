@@ -8,17 +8,18 @@ import {
   IconButton,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Context } from "../..";
 import { observer } from "mobx-react-lite";
 import NotifPanelBox from "../UI/boxes/NotifPanelBox";
+import { useNotificationStore } from "@/store/useNotificationsStore";
+import { useUserStore } from "@/store/useUserStore";
 
 const NotifMethod = () => {
-  const { notificationStore } = useContext(Context);
-  const { store } = useContext(Context);
   const [isVisible, setIsVisible] = useState<boolean>(false);
+  const notificationStore = useNotificationStore();
+  const user = useUserStore((state) => state.user);
 
   const confirmTelegram = async () => {
-    if (!store.user) {
+    if (!user) {
       console.warn("User is not authorized!");
       return;
     }
